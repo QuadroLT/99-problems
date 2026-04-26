@@ -23,12 +23,21 @@ nthElement 1 (x:_) = Just x
 nthElement n (_ :xs) = nthElement (n - 1) xs
 
 
--- P04
+-- P04 get list length
+
 listLength :: [a] -> Int
 listLength lst = aux 0 lst
   where
-    aux acc [] = acc
+    aux acc []     = acc
     aux acc (x:xs) = aux (acc + 1) xs
+
+-- P05 reverse a list
+
+reverseList :: [a] -> [a]
+reverseList lst = aux [] lst
+  where
+    aux acc []     = acc
+    aux acc (x:xs) = aux (x:acc) xs
 
 -- Tests (simple)
 allTests = TestList
@@ -42,7 +51,8 @@ allTests = TestList
     "P03 02" ~: nthElement 0 [1, 2, 3] @?= (Nothing::Maybe Int),
     "P03 03" ~: nthElement 5 []        @?= (Nothing::Maybe Int),
     "P04 01" ~: listLength [1, 2, 3]   @?= 3,
-    "P04 02" ~: listLength []          @?= 0
+    "P04 02" ~: listLength []          @?= 0,
+    "P05 01" ~: reverseList [1, 2, 3]  @?= [3, 2, 1]
     ]
 
 main = do

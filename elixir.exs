@@ -32,6 +32,15 @@ defmodule NinetyNine do
   def list_length(lst) do
     aux_length(0, lst)
   end
+
+  # P05 reevrse a list
+
+  defp aux_reverse(acc, []) do acc end
+  defp aux_reverse(acc, [x | xs]) do aux_reverse([x | acc], xs) end
+  def reverse_list(lst) do
+    aux_reverse([], lst)
+  end
+
 end
 
 
@@ -60,7 +69,12 @@ defmodule Tests do
     assert NinetyNine.list_length([1, 2, 3]) == 3
     assert NinetyNine.list_length([]) == 0
   end
+
+  test "P05" do
+    assert NinetyNine.reverse_list([1, 2, 3]) == [3, 2, 1]
+  end
 end
+
 
 defmodule Main do
   def run  do

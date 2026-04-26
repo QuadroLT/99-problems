@@ -41,9 +41,18 @@
   (define (inner acc l)
     (cond
       [(empty? l) acc]
-      [else (inner (+ 1 acc) (cdr lst))]))
+      [else (inner (+ 1 acc) (cdr l))]))
   (inner 0 lst))
 
+
+;; P05 reverse a list
+
+(define (reverse-list lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) acc]
+      [else (inner (cons (car l) acc) (cdr l))]))
+  (inner '() lst))
 
 ;; Tests
 
@@ -70,6 +79,11 @@
               (check-equal? (list-length '(1, 2, 3)) 3 "Regular list")
               (check-equal? (list-length '()) 0 "Empty list")
               ))
+
+(define test-05
+  (test-suite "P05"
+              (check-equal? (reverse-list '(1 2 3)) '(3 2 1) "regular list")
+              ))
 ;; Runner
 
 (define (main)
@@ -78,6 +92,7 @@
   (run-tests test-02)
   (run-tests test-03)
   (run-tests test-04)
+  (run-tests test-05)
   (displayln "Done"))
 
 (main)
