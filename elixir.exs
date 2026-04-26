@@ -23,6 +23,15 @@ defmodule NinetyNine do
   def nth_element(_, []) do nil end
   def nth_element(1, [x | _]) do x end
   def nth_element(n, [_ | xs]) do nth_element((n-1), xs) end
+
+  # P04 get length of a list
+
+  defp aux_length(acc, []) do acc end
+  defp aux_length(acc, [_x | xs]) do aux_length((acc + 1), xs) end
+
+  def list_length(lst) do
+    aux_length(0, lst)
+  end
 end
 
 
@@ -45,6 +54,11 @@ defmodule Tests do
     assert NinetyNine.nth_element(2, [1, 2, 3, 4]) == 2
     assert NinetyNine.nth_element(3, []) == nil
     assert NinetyNine.nth_element(0, [1, 2, 3]) == nil
+  end
+
+  test "P04" do
+    assert NinetyNine.list_length([1, 2, 3]) == 3
+    assert NinetyNine.list_length([]) == 0
   end
 end
 

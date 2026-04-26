@@ -35,6 +35,15 @@
     )
   )
 
+;; P04 get length of a list
+
+(define (list-length lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) acc]
+      [else (inner (+ 1 acc) (cdr lst))]))
+  (inner 0 lst))
+
 
 ;; Tests
 
@@ -54,10 +63,13 @@
   (test-suite "P03"
               (check-equal? (nth-element 3 '(1 2 3)) 3 "Regular list")
               (check-equal? (nth-element 0 '(1 2 3)) null "invalid index")
-              (check-equal? (nth-element 3 '()) null "empty list with any index")
+              (check-equal? (nth-element 3 '()) null "empty list with any index")))
+
+(define test-04
+  (test-suite "P04"
+              (check-equal? (list-length '(1, 2, 3)) 3 "Regular list")
+              (check-equal? (list-length '()) 0 "Empty list")
               ))
-
-
 ;; Runner
 
 (define (main)
@@ -65,6 +77,7 @@
   (run-tests test-01)
   (run-tests test-02)
   (run-tests test-03)
+  (run-tests test-04)
   (displayln "Done"))
 
 (main)

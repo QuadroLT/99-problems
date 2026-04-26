@@ -1,5 +1,6 @@
 import Test.HUnit
 import Text.Printf (printf)
+import GHC.Arr (accum)
 
 -- P01 get last element of the list
 
@@ -22,6 +23,13 @@ nthElement 1 (x:_) = Just x
 nthElement n (_ :xs) = nthElement (n - 1) xs
 
 
+-- P04
+listLength :: [a] -> Int
+listLength lst = aux 0 lst
+  where
+    aux acc [] = acc
+    aux acc (x:xs) = aux (acc + 1) xs
+
 -- Tests (simple)
 allTests = TestList
   [
@@ -32,9 +40,10 @@ allTests = TestList
     "P02 03" ~: secondToLast []        @?= (Nothing::Maybe Int),
     "P03 01" ~: nthElement 2 [1, 2, 3] @?= Just 2,
     "P03 02" ~: nthElement 0 [1, 2, 3] @?= (Nothing::Maybe Int),
-    "P03 02" ~: nthElement 5 []        @?= (Nothing::Maybe Int)
+    "P03 03" ~: nthElement 5 []        @?= (Nothing::Maybe Int),
+    "P04 01" ~: listLength [1, 2, 3]   @?= 3,
+    "P04 02" ~: listLength []          @?= 0
     ]
-
 
 main = do
   putStrLn "Runnning tests"
