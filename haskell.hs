@@ -1,6 +1,7 @@
 import Test.HUnit
 import Text.Printf (printf)
 import GHC.Arr (accum)
+import qualified Data.List as List
 
 -- P01 get last element of the list
 
@@ -39,21 +40,30 @@ reverseList lst = aux [] lst
     aux acc []     = acc
     aux acc (x:xs) = aux (x:acc) xs
 
+-- P06 test if list is palindrome
+
+isPalindrome :: Eq a =>  [a] -> Bool
+isPalindrome lst = lst == List.reverse lst 
+
+
+
 -- Tests (simple)
 allTests = TestList
   [
-    "P01 01" ~: lastElement [1,2,3]    @?= Just 3,
-    "P01 02" ~: lastElement []         @?= (Nothing:: Maybe Int),
-    "P02 01" ~: secondToLast [1, 2, 3] @?= Just 2,
-    "P02 02" ~: secondToLast [1]       @?= (Nothing::Maybe Int),
-    "P02 03" ~: secondToLast []        @?= (Nothing::Maybe Int),
-    "P03 01" ~: nthElement 2 [1, 2, 3] @?= Just 2,
-    "P03 02" ~: nthElement 0 [1, 2, 3] @?= (Nothing::Maybe Int),
-    "P03 03" ~: nthElement 5 []        @?= (Nothing::Maybe Int),
-    "P04 01" ~: listLength [1, 2, 3]   @?= 3,
-    "P04 02" ~: listLength []          @?= 0,
-    "P05 01" ~: reverseList [1, 2, 3]  @?= [3, 2, 1]
-    ]
+    "P01 01" ~: lastElement [1,2,3]          @?= Just 3,
+    "P01 02" ~: lastElement []               @?= (Nothing:: Maybe Int),
+    "P02 01" ~: secondToLast [1, 2, 3]       @?= Just 2,
+    "P02 02" ~: secondToLast [1]             @?= (Nothing::Maybe Int),
+    "P02 03" ~: secondToLast []              @?= (Nothing::Maybe Int),
+    "P03 01" ~: nthElement 2 [1, 2, 3]       @?= Just 2,
+    "P03 02" ~: nthElement 0 [1, 2, 3]       @?= (Nothing::Maybe Int),
+    "P03 03" ~: nthElement 5 []              @?= (Nothing::Maybe Int),
+    "P04 01" ~: listLength [1, 2, 3]         @?= 3,
+    "P04 02" ~: listLength []                @?= 0,
+    "P05 01" ~: reverseList [1, 2, 3]        @?= [3, 2, 1],
+    "P06 01" ~: isPalindrome [1, 2, 3, 2, 1] @?= True,
+    "P06 02" ~: isPalindrome "ab"            @?= False
+  ]
 
 main = do
   putStrLn "Runnning tests"

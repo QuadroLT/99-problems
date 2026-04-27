@@ -41,6 +41,12 @@ defmodule NinetyNine do
     aux_reverse([], lst)
   end
 
+  # P06 is a list palindrome
+
+  def palindrome_p lst do
+    lst == Enum.reverse(lsp)
+  end
+
 end
 
 
@@ -73,6 +79,13 @@ defmodule Tests do
   test "P05" do
     assert NinetyNine.reverse_list([1, 2, 3]) == [3, 2, 1]
   end
+
+  test "P06" do
+    assert NinetyNine.palindrome_p([1, 2, 3, 2, 1]) == true
+    assert NinetyNine.palindrome_p([1, 2]) == false
+    assert NinetyNine.palindrome_p([]) == true
+  end
+
 end
 
 

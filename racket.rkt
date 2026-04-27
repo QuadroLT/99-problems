@@ -54,6 +54,13 @@
       [else (inner (cons (car l) acc) (cdr l))]))
   (inner '() lst))
 
+
+;; P06 palindrome
+
+(define (palindrome? lst)
+
+  (equal? lst (reverse lst)))
+
 ;; Tests
 
 (define test-01
@@ -84,6 +91,12 @@
   (test-suite "P05"
               (check-equal? (reverse-list '(1 2 3)) '(3 2 1) "regular list")
               ))
+
+(define test-06
+  (test-suite "P06"
+              (check-true (palindrome? '(1 2 3 2 1)) "Regular list")
+              ))
+
 ;; Runner
 
 (define (main)
@@ -93,6 +106,7 @@
   (run-tests test-03)
   (run-tests test-04)
   (run-tests test-05)
+  (run-tests test-06)
   (displayln "Done"))
 
 (main)
