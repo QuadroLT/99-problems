@@ -10,12 +10,17 @@ lastElement []  = Nothing
 lastElement [x] = Just x
 lastElement (x: xs) = lastElement xs
 
--- P02
+-- P02 second to last element
+
 secondToLast :: [a] -> Maybe a
 secondToLast []  = Nothing
 secondToLast [x] = Nothing
 secondToLast (x: [_]) = Just x
 secondToLast (x: xs) = secondToLast xs
+
+
+-- P03 get n-th element of a list
+
 
 nthElement :: Int -> [a] -> Maybe a
 nthElement 0 lst    = Nothing
@@ -46,6 +51,18 @@ isPalindrome :: Eq a =>  [a] -> Bool
 isPalindrome lst = lst == List.reverse lst 
 
 
+-- P07 flatten nested list
+
+data NestedList a = Elem a | List [NestedList a]
+
+flattenList :: NestedList a -> [a]
+flattenList lst = aux [] lst
+  where
+    aux acc (List [])     = acc
+    aux acc (Elem x)      = x:acc
+    aux acc (List (x:xs)) = aux (aux acc (List xs)) x
+
+
 
 -- Tests (simple)
 allTests = TestList
@@ -62,8 +79,9 @@ allTests = TestList
     "P04 02" ~: listLength []                @?= 0,
     "P05 01" ~: reverseList [1, 2, 3]        @?= [3, 2, 1],
     "P06 01" ~: isPalindrome [1, 2, 3, 2, 1] @?= True,
-    "P06 02" ~: isPalindrome "ab"            @?= False
-  ]
+    "P06 02" ~: isPalindrome "ab"            @?= False,
+    "P07 01" ~: flattenList (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]) @?= [1, 2, 3, 4, 5]
+    ]
 
 main = do
   putStrLn "Runnning tests"

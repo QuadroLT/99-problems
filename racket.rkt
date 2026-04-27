@@ -61,6 +61,21 @@
 
   (equal? lst (reverse lst)))
 
+;; P07 flatten nested list
+
+(define (flatten-list lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) acc]
+      [else
+       (let ([head (car l)]
+             [tail (cdr l)])
+         (cond
+           [(list? head) (inner (inner acc head) tail)]
+           [else (inner (cons head acc) tail)]))]))
+  (reverse (inner '() lst)))
+
+
 ;; Tests
 
 (define test-01
@@ -97,6 +112,11 @@
               (check-true (palindrome? '(1 2 3 2 1)) "Regular list")
               ))
 
+(define test-07
+  (test-suite "P07"
+              (check-equal? (flatten-list '(1 (2 3) (4 5))) '(1 2 3 4 5) "Regular test")
+              ))
+
 ;; Runner
 
 (define (main)
@@ -107,6 +127,7 @@
   (run-tests test-04)
   (run-tests test-05)
   (run-tests test-06)
+  (run-tests test-07)
   (displayln "Done"))
 
 (main)

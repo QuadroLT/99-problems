@@ -44,7 +44,17 @@ defmodule NinetyNine do
   # P06 is a list palindrome
 
   def palindrome_p lst do
-    lst == Enum.reverse(lsp)
+    lst == Enum.reverse(lst)
+  end
+
+  # P07 flatten nested list
+
+  defp aux_flatten(acc, [])  do acc end
+  defp aux_flatten(acc, [x | xs])  do aux_flatten(aux_flatten(acc, xs), x)  end
+  defp aux_flatten(acc, x) do [x | acc] end
+
+  def flatten_list(lst) do
+    aux_flatten([], lst)
   end
 
 end
@@ -84,6 +94,10 @@ defmodule Tests do
     assert NinetyNine.palindrome_p([1, 2, 3, 2, 1]) == true
     assert NinetyNine.palindrome_p([1, 2]) == false
     assert NinetyNine.palindrome_p([]) == true
+  end
+
+  test "P07" do
+    assert NinetyNine.flatten_list([1, [2, [3, [4], 5]]]) === [1, 2, 3, 4, 5]
   end
 
 end
