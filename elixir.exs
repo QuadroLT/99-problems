@@ -57,6 +57,44 @@ defmodule NinetyNine do
     aux_flatten([], lst)
   end
 
+
+  # P08 remove replicates from a list
+
+
+  defp aux_compress(acc, []) do acc end
+  defp aux_compress(acc, [x | xs]) do
+    if x in acc do
+      aux_compress(acc, xs) else aux_compress([x | acc], xs)
+    end
+  end
+  def compress_list(lst) do
+    Enum.reverse(aux_compress([], lst))
+  end
+
+
+  # P09 pack a list
+
+  defp aux_span(_predf, acc, []) do {acc, []}  end
+  defp aux_span(predf, acc, [x|xs]) do
+    if predf.(x) do
+      aux_span(predf, [x|acc], xs) else {acc, [x|xs]}
+    end
+  end
+
+  defp span(predf, lst) do
+    aux_span(predf, [], lst)
+  end
+
+  defp aux_pack_list(acc, []) do Enum.reverse(acc) end
+  defp aux_pack_list(acc, [x|xs]) do
+    {same, rest} = span(fn a -> x==a end, [x| xs])
+    aux_pack_list([same|acc], rest)
+  end
+
+  def pack_list(lst) do
+    aux_pack_list([], lst)
+  end
+
 end
 
 
@@ -97,9 +135,16 @@ defmodule Tests do
   end
 
   test "P07" do
-    assert NinetyNine.flatten_list([1, [2, [3, [4], 5]]]) === [1, 2, 3, 4, 5]
+    assert NinetyNine.flatten_list([1, [2, [3, [4], 5]]]) == [1, 2, 3, 4, 5]
   end
 
+  test "P08" do
+    assert NinetyNine.compress_list([1, 1, 1, 2, 2, 3]) == [1, 2, 3]
+  end
+
+  test "P09" do
+    assert NinetyNine.pack_list([1, 1, 2, 3, 3]) == [[1, 1], [2], [3, 3]]
+  end
 end
 
 

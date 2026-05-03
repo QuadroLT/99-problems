@@ -76,6 +76,23 @@
   (reverse (inner '() lst)))
 
 
+
+;; P08 remove dupricates from a list
+
+
+(define (compress-list lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) acc]
+      [else
+       (let
+           ([head (car l)])
+           (if (member head acc)
+               (inner acc (cdr l))
+               (inner (cons head acc) (cdr l))))])
+    )
+  (reverse (inner '() lst)))
+
 ;; Tests
 
 (define test-01
@@ -117,6 +134,10 @@
               (check-equal? (flatten-list '(1 (2 3) (4 5))) '(1 2 3 4 5) "Regular test")
               ))
 
+(define test-08
+  (test-suite "P08"
+              (check-equal? (compress-list '(1 1 1 2 2 2)) '(1 2) "Regular test")
+  ))
 ;; Runner
 
 (define (main)
@@ -128,6 +149,7 @@
   (run-tests test-05)
   (run-tests test-06)
   (run-tests test-07)
+  (run-tests test-08)
   (displayln "Done"))
 
 (main)

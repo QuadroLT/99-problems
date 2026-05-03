@@ -2,6 +2,7 @@ import Test.HUnit
 import Text.Printf (printf)
 import GHC.Arr (accum)
 import qualified Data.List as List
+import GHC.IO.Exception (IOErrorType(SystemError))
 
 -- P01 get last element of the list
 
@@ -48,13 +49,12 @@ reverseList lst = aux [] lst
 -- P06 test if list is palindrome
 
 isPalindrome :: Eq a =>  [a] -> Bool
-isPalindrome lst = lst == List.reverse lst 
+isPalindrome lst = lst == List.reverse lst
 
 
 -- P07 flatten nested list
 
 data NestedList a = Elem a | List [NestedList a]
-
 flattenList :: NestedList a -> [a]
 flattenList lst = aux [] lst
   where
@@ -63,6 +63,34 @@ flattenList lst = aux [] lst
     aux acc (List (x:xs)) = aux (aux acc (List xs)) x
 
 
+-- P08 remove duplicates from a list
+
+compressList :: Eq a => [a] -> [a]
+compressList lst = List.reverse $ aux [] lst
+  where
+    aux acc [] = acc
+    aux acc (x:xs) = if x `elem` acc then aux acc xs else aux (x:acc) xs
+
+
+-- P09 pack consecutive items to a list
+
+
+mySpan :: (a -> Bool) -> [a] -> ([a], [a])
+mySpan func lst = aux func lst []
+  where
+    aux func [] acc = (acc, [])
+    aux func (x: xs) acc
+      | func x = aux func xs (x:acc)
+      | otherwise = (acc, (x:xs))
+
+
+packList :: Eq a => [a] -> [[a]]
+packList lst = aux [] lst
+  where
+    aux acc []     = reverse acc
+    aux acc (x:xs) = aux (y:acc) ys
+      where
+        (y, ys) = span (==x) (x:xs)
 
 -- Tests (simple)
 allTests = TestList
@@ -80,7 +108,10 @@ allTests = TestList
     "P05 01" ~: reverseList [1, 2, 3]        @?= [3, 2, 1],
     "P06 01" ~: isPalindrome [1, 2, 3, 2, 1] @?= True,
     "P06 02" ~: isPalindrome "ab"            @?= False,
-    "P07 01" ~: flattenList (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]) @?= [1, 2, 3, 4, 5]
+    "P07 01" ~: flattenList (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]) @?= [1, 2, 3, 4, 5],
+    "P08 01" ~: compressList [1, 1, 1, 2, 2, 3] @?= [1, 2, 3],
+    "P09 00" ~: mySpan (==3) [3, 3, 4, 4, 4]    @?= ([3, 3], [4, 4, 4]),
+    "P09 01" ~: packList [1, 1, 1, 2, 1, 1, 1, 2, 2]   @?= [[1, 1, 1], [2], [1, 1, 1], [2, 2]]
     ]
 
 main = do
