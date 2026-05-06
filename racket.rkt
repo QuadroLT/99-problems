@@ -93,6 +93,36 @@
     )
   (reverse (inner '() lst)))
 
+
+;; (define (compress-list-fold lst)
+;;   (foldl 
+;;   )
+  
+;; P09 pack a list
+
+(define (span pred lst)
+  (cond
+    [(empty? lst) '(() ())]
+    [(pred (car lst))
+     (let ([res (span pred (cdr lst))])
+       (list (cons (car lst) (car res)) (cadr res)))]
+     [else (list '() lst)]))
+
+(define (pack-list lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) (reverse acc)]
+      [else
+       (let* (
+              [head (car l)]
+              [pred (lambda (x) (= x head))]
+              [span-res (span pred l)])
+         (inner (cons (car span-res)) (cadr span-res)))
+       ]))
+    (inner '() lst)
+  )
+
+
 ;; Tests
 
 (define test-01
@@ -138,6 +168,11 @@
   (test-suite "P08"
               (check-equal? (compress-list '(1 1 1 2 2 2)) '(1 2) "Regular test")
   ))
+
+
+(define test-09
+  (test-suite "P09"
+              (check-equal? (pack-list '(1 1 1 1 2 3 3 )) '('(1 1 1 1) '(2) '(3 3)) "Regular test")))
 ;; Runner
 
 (define (main)
