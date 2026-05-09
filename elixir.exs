@@ -95,6 +95,20 @@ defmodule NinetyNine do
     aux_pack_list([], lst)
   end
 
+  # P10 run length encoding on a list
+
+  defp aux_length_encode(acc, []) do Enum.reverse(acc) end
+  defp aux_length_encode(acc, [x|xs]) do
+    {same, rest} = span(fn a -> a==x end, [x|xs])
+    encoded = {length(same), List.first(same)}
+    aux_length_encode([encoded|acc], rest)
+  end
+
+
+  def length_encode(lst) do
+    aux_length_encode([], lst)
+  end
+
 end
 
 
@@ -145,6 +159,11 @@ defmodule Tests do
   test "P09" do
     assert NinetyNine.pack_list([1, 1, 2, 3, 3]) == [[1, 1], [2], [3, 3]]
   end
+
+  test "P10" do
+    assert NinetyNine.length_encode([1, 1, 2, 3, 3]) == [{2, 1}, {1, 2}, {2, 3}]
+  end
+
 end
 
 

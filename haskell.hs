@@ -92,6 +92,18 @@ packList lst = aux [] lst
       where
         (y, ys) = span (==x) (x:xs)
 
+
+-- P10 Run-length encoding of a list
+
+lengthEncode :: Eq a => [a] -> [(Int, a)]
+lengthEncode lst = aux [] lst
+  where
+    aux acc [] = reverse acc
+    aux acc (x:xs) = aux ((length y, head y): acc) ys
+      where
+        (y, ys) = span (==x) (x:xs)
+
+
 -- Tests (simple)
 allTests = TestList
   [
@@ -111,7 +123,8 @@ allTests = TestList
     "P07 01" ~: flattenList (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]) @?= [1, 2, 3, 4, 5],
     "P08 01" ~: compressList [1, 1, 1, 2, 2, 3] @?= [1, 2, 3],
     "P09 00" ~: mySpan (==3) [3, 3, 4, 4, 4]    @?= ([3, 3], [4, 4, 4]),
-    "P09 01" ~: packList [1, 1, 1, 2, 1, 1, 1, 2, 2]   @?= [[1, 1, 1], [2], [1, 1, 1], [2, 2]]
+    "P09 01" ~: packList [1, 1, 1, 2, 1, 1, 1, 2, 2]   @?= [[1, 1, 1], [2], [1, 1, 1], [2, 2]],
+    "P10 01" ~: lengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [(3, 1), (1, 2), (3, 1), (2, 2)]
     ]
 
 main = do

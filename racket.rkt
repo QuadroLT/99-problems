@@ -94,10 +94,7 @@
   (reverse (inner '() lst)))
 
 
-;; (define (compress-list-fold lst)
-;;   (foldl 
-;;   )
-  
+
 ;; P09 pack a list
 
 (define (span pred lst)
@@ -117,11 +114,29 @@
               [head (car l)]
               [pred (lambda (x) (= x head))]
               [span-res (span pred l)])
-         (inner (cons (car span-res)) (cadr span-res)))
+         (inner (cons (car span-res) acc) (cadr span-res)))
        ]))
     (inner '() lst)
   )
 
+
+;; P10 run length encoding on list
+
+
+(define (length-encode lst)
+  (define (inner acc l)
+    (cond
+      [(empty? l) (reverse acc)]
+      [else
+       (let* ([head (car l)]
+              [pred (lambda (x) (= x head))]
+              [span-res (span pred l)]
+              [n (length (car span-res))])
+         (inner (cons (cons n head) acc) (cadr span-res)))]
+     )
+    )
+  (inner '() lst)
+  )
 
 ;; Tests
 
@@ -172,7 +187,19 @@
 
 (define test-09
   (test-suite "P09"
-              (check-equal? (pack-list '(1 1 1 1 2 3 3 )) '('(1 1 1 1) '(2) '(3 3)) "Regular test")))
+              (check-equal? (pack-list '(1 1 1 1 2 3 3 )) '((1 1 1 1) (2) (3 3)) "Regular test")
+              ))
+
+
+(define test-10
+  (test-suite "P10"
+              (check-equal?
+               (length-encode '(1 1 1 1 2 3 3 ))
+               '((4 . 1) (1 . 2) (2 . 3))
+               "Regular test")
+              ))
+
+
 ;; Runner
 
 (define (main)
@@ -185,6 +212,8 @@
   (run-tests test-06)
   (run-tests test-07)
   (run-tests test-08)
+  (run-tests test-09)
+  (run-tests test-10)
   (displayln "Done"))
 
 (main)
