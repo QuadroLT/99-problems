@@ -103,6 +103,17 @@ lengthEncode lst = aux [] lst
       where
         (y, ys) = span (==x) (x:xs)
 
+-- P11 modified run length encode
+
+data Encoding a = Single a | Multiple Int a
+  deriving (Show, Eq)
+
+modLengthEncode :: Eq a => [a] -> [Encoding a]
+modLengthEncode lst = map modEncode (lengthEncode lst)
+  where
+    modEncode (num, obj)
+      | num == 1  = Single obj
+      | otherwise = Multiple num obj
 
 -- Tests (simple)
 allTests = TestList
@@ -123,10 +134,21 @@ allTests = TestList
     "P07 01" ~: flattenList (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]]) @?= [1, 2, 3, 4, 5],
     "P08 01" ~: compressList [1, 1, 1, 2, 2, 3] @?= [1, 2, 3],
     "P09 00" ~: mySpan (==3) [3, 3, 4, 4, 4]    @?= ([3, 3], [4, 4, 4]),
-    "P09 01" ~: packList [1, 1, 1, 2, 1, 1, 1, 2, 2]   @?= [[1, 1, 1], [2], [1, 1, 1], [2, 2]],
-    "P10 01" ~: lengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [(3, 1), (1, 2), (3, 1), (2, 2)]
-    ]
+    "P09 01" ~: packList [1, 1, 1, 2, 1, 1, 1, 2, 2]   @?= [[1, 1, 1],
+                                                            [2],
+                                                            [1, 1, 1],
+                                                            [2, 2]],
+    "P10 01" ~: lengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [(3, 1),
+                                                              (1, 2),
+                                                              (3, 1),
+                                                              (2, 2)],
+    "P11 01"~: modLengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [Multiple 3 1,
+                                                                Single 2,
+                                                                Multiple 3 1,
+                                                                Multiple 2 2]
+  ]
 
 main = do
   putStrLn "Runnning tests"
   runTestTT allTests
+  putStrLn "Tests complete"

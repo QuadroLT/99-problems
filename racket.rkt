@@ -135,8 +135,16 @@
          (inner (cons (cons n head) acc) (cadr span-res)))]
      )
     )
-  (inner '() lst)
-  )
+  (inner '() lst))
+
+(define (mod-length-encode lst)
+  (map (lambda (obj)
+         (let ([num (car obj)]
+               [item (cdr obj)])
+         (if (= num 1)
+             item
+             obj)))
+       (length-encode lst)))
 
 ;; Tests
 
@@ -200,6 +208,15 @@
               ))
 
 
+(define test-11
+  (test-suite "P11"
+              (check-equal?
+               (mod-length-encode '(1 1 1 1 2 3 3 ))
+               '((4 . 1) 2 (2 . 3))
+               "Regular test")
+              ))
+
+
 ;; Runner
 
 (define (main)
@@ -214,6 +231,7 @@
   (run-tests test-08)
   (run-tests test-09)
   (run-tests test-10)
+  (run-tests test-11)
   (displayln "Done"))
 
 (main)

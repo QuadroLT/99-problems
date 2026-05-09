@@ -109,6 +109,18 @@ defmodule NinetyNine do
     aux_length_encode([], lst)
   end
 
+  # P11 modified length encode
+
+  def mod_length_encode(lst) do
+    pack = length_encode(lst)
+    func = fn
+      {1, obj} -> obj
+      {count, obj} -> {count, obj}
+    end
+
+    Enum.map(pack, func)
+  end
+
 end
 
 
@@ -164,6 +176,9 @@ defmodule Tests do
     assert NinetyNine.length_encode([1, 1, 2, 3, 3]) == [{2, 1}, {1, 2}, {2, 3}]
   end
 
+  test "P11" do
+    assert NinetyNine.mod_length_encode([1, 1, 2, 3, 3]) == [{2, 1}, 2, {2, 3}]
+  end
 end
 
 
