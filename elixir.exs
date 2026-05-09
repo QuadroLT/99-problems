@@ -121,6 +121,16 @@ defmodule NinetyNine do
     Enum.map(pack, func)
   end
 
+  # P12 decode encoded list
+  def decode []  do [] end
+  def decode([x|xs]) do
+    lambda = fn
+      {n, obj} -> List.duplicate(obj, n)
+      obj -> [obj]
+    end
+    lambda.(x) ++ decode(xs)
+  end
+
 end
 
 
@@ -178,6 +188,10 @@ defmodule Tests do
 
   test "P11" do
     assert NinetyNine.mod_length_encode([1, 1, 2, 3, 3]) == [{2, 1}, 2, {2, 3}]
+  end
+
+  test "P12" do
+    assert NinetyNine.decode([{2, 1}, 2, {2, 3}]) == [1, 1, 2, 3, 3]
   end
 end
 

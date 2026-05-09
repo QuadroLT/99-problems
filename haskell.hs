@@ -115,6 +115,17 @@ modLengthEncode lst = map modEncode (lengthEncode lst)
       | num == 1  = Single obj
       | otherwise = Multiple num obj
 
+
+-- P12 decode a list
+
+decode :: [Encoding a] -> [a]
+decode []    = []
+decode (x:xs) = aux x ++ decode xs
+  where
+    aux (Single x)     = [x]
+    aux (Multiple z x) = replicate z x
+
+
 -- Tests (simple)
 allTests = TestList
   [
@@ -142,10 +153,12 @@ allTests = TestList
                                                               (1, 2),
                                                               (3, 1),
                                                               (2, 2)],
-    "P11 01"~: modLengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [Multiple 3 1,
+    "P11 01" ~: modLengthEncode [1, 1, 1, 2, 1, 1, 1, 2, 2] @?= [Multiple 3 1,
                                                                 Single 2,
                                                                 Multiple 3 1,
-                                                                Multiple 2 2]
+                                                                Multiple 2 2],
+    
+    "P12 01" ~: decode [Multiple 3 1, Single 2, Multiple 3 3] @?= [1, 1, 1, 2, 3, 3, 3]
   ]
 
 main = do

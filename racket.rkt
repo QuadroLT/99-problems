@@ -146,6 +146,19 @@
              obj)))
        (length-encode lst)))
 
+;; P12 decode encoded list
+
+
+(define (decode lst)
+  (define (inner  obj)
+    (cond
+      [(pair? obj) (make-list (car obj) (cdr obj))]
+      [else (list obj)]))
+  (cond
+    [(empty? lst) '()]
+    [else (append (inner (car lst)) (decode (cdr lst)))])
+  )
+
 ;; Tests
 
 (define test-01
@@ -211,11 +224,19 @@
 (define test-11
   (test-suite "P11"
               (check-equal?
-               (mod-length-encode '(1 1 1 1 2 3 3 ))
+               (mod-length-encode '(1 1 1 1 2 3 3))
                '((4 . 1) 2 (2 . 3))
                "Regular test")
               ))
 
+(define test-12
+  (test-suite "P12"
+              (check-equal?
+               (decode '((4 . 1) 2 (2 . 3)))
+               '(1 1 1 1 2 3 3)
+               "Regular test"
+               ))
+  )
 
 ;; Runner
 
@@ -232,6 +253,7 @@
   (run-tests test-09)
   (run-tests test-10)
   (run-tests test-11)
+  (run-tests test-12)
   (displayln "Done"))
 
 (main)
